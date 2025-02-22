@@ -1,0 +1,114 @@
+npm install multer
+const multer = require('multer');
+const path = require('path');
+
+// Set up storage configuration
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // Save images to 'uploads/images' and videos to 'uploads/videos'
+    const folder = file.mimetype.startsWith('image/') ? 'uploads/images' : 'uploads/videos';
+    cb(null, folder);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}_${file.originalname}`);
+  }
+});
+
+// Initialize upload middleware
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // Limit file size to 10MB
+  fileFilter: (req, file, cb) => {
+    // Accept only image and video files
+    if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image and video files are allowed.'));
+    }
+  }
+});  name: String,
+  category: String,
+  mediaType: String, // 'image' or 'video'
+  mediaPath: String  // Path to the media file
+});// Route to upload images
+app.post('/api/upload/image', upload.single('media'), async (req, res) => {
+  try {
+    const { filename, path: filePath } = req.file;
+    const newProduct = new Product({
+      name: req.body.name,
+      category: req.body.category,
+      mediaType: 'image',
+      mediaPath: filePath
+    });
+    await newProduct.save();
+    res.status(201).json(newProduct);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}); 
+
+// Route to upload videos
+app.post('/api/upload/video', upload.single('media'), async (req, res) => {
+  try {
+    const { filename, path: filePath } = req.file;
+    const newProduct = new Product({
+      name: req.body.name,
+      category: req.body.category,
+      mediaType: 'video',
+      mediaPath: filePath
+    });
+    await newProduct.save();
+    res.status(201).json(newProduct);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+            productDiv.innerHTML += `<p>${product.category}</p>`;
+          productSection.appendChild(productDiv);
+        });
+      } catch (err) {
+        console.error('Error fetching products:', err);
+      }
+    }
+    window.onload = loadProducts;
+  </script>
+</head>
+<body>
+  <!-- Your existing HTML structure -->
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HADYD Tools - Quality Tools & Machinery</title>
+  <style>
+    /* Your existing styles */
+  </style>
+  <script>
+    async function loadProducts() {
+      try {
+        const response = await fetch('/api/products');
+        const products = await response.json();
+        const productSection = document.querySelector('.product-section');
+        productSection.innerHTML = '';
+        products.forEach(product => {
+          const productDiv = document.createElement('div');
+          productDiv.className = 'product';
+          productDiv.innerHTML = `<h3>${product.name}</h3>`;
+          if (product.mediaType === 'image') {
+            productDiv.innerHTML += `<img src="${product.mediaPath}" alt="${product.name}" width="200">`;
+          } else if (product.mediaType === 'video') {
+            productDiv.innerHTML += `
+              <video width="320" height="240" controls>
+                <source src="${product.mediaPath}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>`;
+          }
+          <section id="contact">
+  <h2>Contact Us</h2>
+  <p>Email: info@hadydtoolselectricals.com</p>
+  <p>Phone: +254746998033</p>
+  <p>Location: KISUMU, OGINGA ODINGA STREET</p>
+</section>
